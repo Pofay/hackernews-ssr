@@ -35,7 +35,6 @@ class MyApp extends App {
       const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
 
       return {pageProps};
-
   }
 
   render() {
