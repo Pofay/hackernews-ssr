@@ -9,6 +9,7 @@ class Home extends Component {
   static async getInitialProps({ store, isServer, pathname, query }) {
     const db = await loadDB();
 
+    store.dispatch({type: 'FOO', payload: 'foo'});
     console.log(store.getState())
 
     const ids = await db.child('topstories').once('value');
