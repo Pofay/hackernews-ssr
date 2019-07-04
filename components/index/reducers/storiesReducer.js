@@ -5,24 +5,40 @@ import { merge, head } from 'ramda';
 const storySchema = new schema.Entity('stories');
 const storyListSchema = [storySchema];
 
+const addStory = (state, action) => {
+  const normalizedData = normalize(action.payload, storySchema);
+  const { stories } = normalizedData.entities;
+  const id = normalizedData.result;
+  return { ...state, [id]: stories[id] };
+};
+
 const storyById = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_STORY':
-      const normalizedData = normalize(action.payload, storySchema);
+      return addStory(state, action);
+    case 'LOAD_STORIES':
+      const normalizedData = normalize(action.payload, storyListSchema);
       const { stories } = normalizedData.entities;
-      const id = normalizedData.result
-      return {...state, [id] : stories[id] }
+      return merge(state, stories);
     default:
       return state;
   }
 };
 
+const addStoryId = (state, action) => {
+  const normalizedData = normalize(action.payload, storySchema);
+  const { result } = normalizedData;
+  return state.concat(result);
+};
+
 const allStories = (state = [], action) => {
   switch (action.type) {
     case 'ADD_STORY':
-      const normalizedData = normalize(action.payload, storySchema);
-      const { result } = normalizedData;
-      return state.concat(result);
+      return addStoryId(state, action);
+    case 'LOAD_STORIES':
+      const normalizedData = normalize(action.payload, storyListSchema)
+      const { result } = normalizedData
+      return state.concat(result)
     default:
       return state;
   }
