@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import Story from '../components/index/story';
 import Head from '../components/common/head';
 import Nav from '../components/common/nav';
-import loadDB from '../firebase-loader';
+import loadDB from '../firebase-config';
 import { connect } from 'react-redux';
+import { LOAD_STORIES_SUCCESS } from '../actionTypes'
 
 class Home extends Component {
   static async getInitialProps({ store, isServer, pathname, query }) {
     const db = await loadDB();
-
-    store.dispatch({type: 'FOO', payload: 'foo'});
-    console.log(store.getState())
 
     const ids = await db.child('topstories').once('value');
     const stories = await Promise.all(
@@ -25,12 +23,18 @@ class Home extends Component {
         )
     ).then(s => s.map(s => s.val()));
 
-    return { stories };
+    if (isServer) {
+      store.dispatch({ type: LOAD_STORIES_SUCCESS, payload: stories });
+    }
+    console.log(store.getState());
+
+    return {};
   }
 
   render() {
+    const { stories } = this.props;
+    const storyList = stories.allIds.map(id => stories.byId[id]);
 
-    const { stories } = this.props
     return (
       <div>
         <Head title="Home" />
@@ -40,7 +44,7 @@ class Home extends Component {
           <h1 className="title">Hackernews SSR</h1>
         </div>
 
-        {stories.map(story => (
+        {storyList.map(story => (
           <Story
             key={story.id}
             url={story.url}

@@ -1,6 +1,7 @@
 import { normalize, schema } from 'normalizr';
 import { combineReducers, bindActionCreators } from 'redux';
-import { merge, head } from 'ramda';
+import { merge } from 'ramda';
+import { LOAD_STORIES_SUCCESS, ADD_STORY } from '../../../actionTypes';
 
 const storySchema = new schema.Entity('stories');
 const storyListSchema = [storySchema];
@@ -14,9 +15,9 @@ const addStory = (state, action) => {
 
 const storyById = (state = {}, action) => {
   switch (action.type) {
-    case 'ADD_STORY':
+    case ADD_STORY:
       return addStory(state, action);
-    case 'LOAD_STORIES':
+    case LOAD_STORIES_SUCCESS:
       const normalizedData = normalize(action.payload, storyListSchema);
       const { stories } = normalizedData.entities;
       return merge(state, stories);
@@ -33,12 +34,12 @@ const addStoryId = (state, action) => {
 
 const allStories = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_STORY':
+    case ADD_STORY:
       return addStoryId(state, action);
-    case 'LOAD_STORIES':
-      const normalizedData = normalize(action.payload, storyListSchema)
-      const { result } = normalizedData
-      return state.concat(result)
+    case LOAD_STORIES_SUCCESS:
+      const normalizedData = normalize(action.payload, storyListSchema);
+      const { result } = normalizedData;
+      return state.concat(result);
     default:
       return state;
   }

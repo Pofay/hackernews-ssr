@@ -1,0 +1,5 @@
+
+export const LOAD_STORIES = 'LOAD_STORIES'
+export const ADD_STORY = 'ADD_STORY'
+
+export const LOAD_STORIES_SUCCESS = 'LOAD_STORIES_SUCCESS'
