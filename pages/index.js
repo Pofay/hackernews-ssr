@@ -4,30 +4,13 @@ import Head from '../components/common/head';
 import Nav from '../components/common/nav';
 import loadDB from '../firebase-config';
 import { connect } from 'react-redux';
-import { LOAD_STORIES_SUCCESS } from '../actionTypes'
+import { LOAD_STORIES } from '../actionTypes';
 
 class Home extends Component {
   static async getInitialProps({ store, isServer, pathname, query }) {
-    const db = await loadDB();
-
-    const ids = await db.child('topstories').once('value');
-    const stories = await Promise.all(
-      ids
-        .val()
-        .slice(0, 20)
-        .map(id =>
-          db
-            .child('item')
-            .child(id)
-            .once('value')
-        )
-    ).then(s => s.map(s => s.val()));
-
     if (isServer) {
-      store.dispatch({ type: LOAD_STORIES_SUCCESS, payload: stories });
+      store.dispatch({ type: LOAD_STORIES });
     }
-    console.log(store.getState());
-
     return {};
   }
 
