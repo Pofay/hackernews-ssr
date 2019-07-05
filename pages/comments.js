@@ -3,7 +3,7 @@ import Head from '../components/common/head';
 import Nav from '../components/common/nav';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
-
+import { pipe } from 'ramda'
 
 // Get id from query params
 // Load story from store based on id

@@ -1,12 +1,14 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import storiesReducer from '../components/index/reducers/storiesReducer';
+import commentsReducer from '../components/comments/reducers';
 import createSagaMiddleware from 'redux-saga';
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { LOAD_STORIES, LOAD_STORIES_SUCCESS } from '../actionTypes';
 import loadDB from '../firebase-config';
 
 const reducers = combineReducers({
-  stories: storiesReducer
+  stories: storiesReducer,
+  comments: commentsReducer
 });
 
 function* loadStories(action) {
@@ -30,7 +32,6 @@ function* loadStories(action) {
     db
   );
 
-  console.log(stories)
   yield put({ type: LOAD_STORIES_SUCCESS, payload: stories });
 }
 
