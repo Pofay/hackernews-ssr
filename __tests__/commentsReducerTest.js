@@ -1,5 +1,6 @@
 import { createStore, combineReducers } from 'redux';
 import commentsReducer from '../components/comments/reducers';
+import { ADD_COMMENT } from '../actionTypes';
 
 const reducerUnderTest = combineReducers({
   comments: commentsReducer
@@ -52,7 +53,7 @@ it('Adding a comment into tree', () => {
 
   const store = createStore(reducerUnderTest, {});
 
-  store.dispatch({ type: 'ADD_COMMENT', payload: apiResponse });
+  store.dispatch({ type: ADD_COMMENT, payload: apiResponse });
   const actual = store.getState();
 
   expect(actual).toEqual(expected);
