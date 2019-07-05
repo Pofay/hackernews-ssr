@@ -1,10 +1,10 @@
 {
   "name": "create-next-example-app",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "date-fns": "^1.30.1",

@@ -21,7 +21,7 @@ const HNStory = props => (
         <b>{props.user}</b>
       </p>
       <div className="comments">
-        <Link href={`/comments/${props.id}`}>
+        <Link as={`/c/${props.id}`} href={`/comments?id=${props.id}`}>
           <a>
             <h3>Comments: {props.descendants}</h3>
           </a>
