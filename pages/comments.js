@@ -4,6 +4,10 @@ import Nav from '../components/common/nav';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 
+
+// Get id from query params
+// Load story from store based on id
+//
 const Comments = props => (
   <div>
     <Head title="Comments" />
@@ -12,6 +16,9 @@ const Comments = props => (
     <div className="hero">
       <h1 className="title">Hackernews SSR</h1>
     </div>
+
+
+
 
     <style jsx>{`
       .hero {

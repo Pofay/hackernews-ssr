@@ -30,6 +30,7 @@ function* loadStories(action) {
     db
   );
 
+  console.log(stories)
   yield put({ type: LOAD_STORIES_SUCCESS, payload: stories });
 }
 

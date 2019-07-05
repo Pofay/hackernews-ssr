@@ -1,4 +1,5 @@
 import storiesReducer from '../components/index/reducers/storiesReducer';
+import { LOAD_STORIES_SUCCESS, ADD_STORY } from '../actionTypes';
 import { createStore, combineReducers } from 'redux';
 
 const reducerUnderTest = combineReducers({
@@ -121,7 +122,7 @@ it('Loading a list of stories returns normalized form', () => {
 
   const store = createStore(reducerUnderTest, {});
 
-  store.dispatch({ type: 'LOAD_STORIES', payload: apiResponse });
+  store.dispatch({ type: LOAD_STORIES_SUCCESS, payload: apiResponse });
   const actual = store.getState();
 
   expect(actual).toEqual(expected);
@@ -213,8 +214,8 @@ it('Loading then adding a story', () => {
 
   const store = createStore(reducerUnderTest, {});
 
-  store.dispatch({ type: 'LOAD_STORIES', payload: firstLoad });
-  store.dispatch({ type: 'ADD_STORY', payload: apiResponse });
+  store.dispatch({ type: LOAD_STORIES_SUCCESS, payload: firstLoad });
+  store.dispatch({ type: ADD_STORY, payload: apiResponse });
 
   const actual = store.getState();
 

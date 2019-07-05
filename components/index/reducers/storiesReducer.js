@@ -1,5 +1,5 @@
 import { normalize, schema } from 'normalizr';
-import { combineReducers, bindActionCreators } from 'redux';
+import { combineReducers } from 'redux';
 import { merge } from 'ramda';
 import { LOAD_STORIES_SUCCESS, ADD_STORY } from '../../../actionTypes';
 
