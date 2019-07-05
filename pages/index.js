@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Story from '../components/index/story';
 import Head from '../components/common/head';
 import Nav from '../components/common/nav';
-import loadDB from '../firebase-config';
 import { connect } from 'react-redux';
 import { LOAD_STORIES } from '../actionTypes';
 

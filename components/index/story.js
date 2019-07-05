@@ -17,9 +17,16 @@ const HNStory = props => (
       </Link>
       <p>
         <b>{props.score} points</b> submitted{' '}
-        {distanceOfUnixTimestampInWordToNow(props.time)} ago by {' '}
+        {distanceOfUnixTimestampInWordToNow(props.time)} ago by{' '}
         <b>{props.user}</b>
       </p>
+      <div className="comments">
+        <Link href={`/comments/${props.id}`}>
+          <a>
+            <h3>Comments: {props.descendants}</h3>
+          </a>
+        </Link>
+      </div>
     </div>
     <style jsx>{`
       .row {
@@ -31,12 +38,31 @@ const HNStory = props => (
       }
       .card {
         padding: 12px 12px 12px;
+        margin-right: 10px;
+        margin-left: 10px;
         width: 600px;
         text-align: left;
         text-decoration: none;
         color: #434343;
         border: 1px solid #9b9b9b;
       }
+      .comments {
+        text-align: left;
+        margin-top: 12px;
+      }
+      .card a {
+        text-decoration: none;
+        font-style: bold;
+      }
+
+      .card a:hover {
+        text-decoration: underline;
+      }
+
+      .comments a h3 {
+        font-size: 16px;
+      }
+
       .card:hover {
         border-color: #067df7;
       }
