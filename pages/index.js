@@ -7,9 +7,7 @@ import { LOAD_STORIES } from '../actionTypes';
 
 class Home extends Component {
   static async getInitialProps({ store, isServer, pathname, query }) {
-    if (isServer) {
-      store.dispatch({ type: LOAD_STORIES });
-    }
+    store.dispatch({ type: LOAD_STORIES });
     return {};
   }
 
