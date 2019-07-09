@@ -5,25 +5,26 @@ import Comment from '../components/comments/comment';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
-import { pipe } from 'ramda';
-
-// Get id from query params
-// Load story from store based on id
-//
+import { compose, pipe, into, map, filter } from 'ramda';
 
 const mapStateToProps = state => ({
   getCurrentStory: id => state.stories.byId[id],
-  getComments: () => state.comments
+  getCommentsForStory: id => {
+    const story = state.stories.byId[id];
+    const { byId, allIds } = state.comments;
+
+    const transducer = compose(
+      map(id => byId[id]),
+      filter(c => c.parent === story.id)
+    );
+
+    return into([], transducer, allIds);
+  }
 });
 
 const Comments = props => {
   const story = props.getCurrentStory(props.id);
-  const { byId, allIds } = props.getComments();
-
-  const comments = allIds
-    .map(id => byId[id])
-    .filter(c => c.parent === story.id);
-
+  const comments = props.getCommentsForStory(props.id);
   return (
     <div>
       <Head title="Comments" />
