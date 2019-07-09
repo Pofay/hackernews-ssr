@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Head from '../components/common/head';
 import Nav from '../components/common/nav';
+import Comment from '../components/comments/comment';
 import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
@@ -23,8 +24,6 @@ const Comments = props => {
     .map(id => byId[id])
     .filter(c => c.parent === story.id);
 
-
-  // requires rendering
   return (
     <div>
       <Head title="Comments" />
@@ -41,12 +40,22 @@ const Comments = props => {
         </p>
       </div>
 
+      <div className="content">
+        {comments.map(c => (
+          <Comment key={c.id} {...c} />
+        ))}
+      </div>
+
       <style jsx>{`
         .heading {
           color: #333;
-          margin-left: 10px;
-          margin-right: 10px;
+          margin-left: 20%;
+          margin-right: 20%;
           margin-bottom: 40px;
+        }
+        .content {
+          margin-left: 15%;
+          margin-right: 15%;
         }
 
         .heading a {

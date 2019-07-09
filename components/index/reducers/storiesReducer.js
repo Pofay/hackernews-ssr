@@ -1,6 +1,6 @@
 import { normalize, schema } from 'normalizr';
 import { combineReducers } from 'redux';
-import { merge } from 'ramda';
+import { merge, contains } from 'ramda';
 import { LOAD_STORIES_SUCCESS, ADD_STORY } from '../../../actionTypes';
 
 const storySchema = new schema.Entity('stories');
@@ -29,7 +29,7 @@ const storyById = (state = {}, action) => {
 const addStoryId = (state, action) => {
   const normalizedData = normalize(action.payload, storySchema);
   const { result } = normalizedData;
-  return state.concat(result);
+  return contains(result, state) ? state : state.concat(result);
 };
 
 const allStories = (state = [], action) => {

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { merge } from 'ramda';
+import { merge, contains } from 'ramda';
 import { normalize, schema } from 'normalizr';
 
 const commentSchema = new schema.Entity('comments');
@@ -21,7 +21,7 @@ const allComments = (state = [], action) => {
     case 'ADD_COMMENT':
       const normalizedData = normalize(action.payload, commentSchema);
       const { result } = normalizedData;
-      return state.concat(result);
+      return contains(result, state) ? state : state.concat(result);
     default:
       return state;
   }
