@@ -1,5 +1,12 @@
-
-export const LOAD_STORIES = 'LOAD_STORIES'
 export const ADD_STORY = 'ADD_STORY'
 
 export const ADD_COMMENT = 'ADD_COMMENT'
+
+// SAGA TYPES
+export const LOAD_STORY = 'LOAD_STORY'
+export const LOAD_STORIES = 'LOAD_STORIES'
+export const LOAD_COMMENTS_FOR_STORY = 'LOAD_COMMENTS_FOR_STORY'
+
+
+
+

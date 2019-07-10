@@ -2,9 +2,22 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import storiesReducer from '../components/index/reducers/storiesReducer';
 import commentsReducer from '../components/comments/reducers';
 import createSagaMiddleware from 'redux-saga';
-import { all, takeEvery, call, put, select } from 'redux-saga/effects';
+import {
+  all,
+  takeEvery,
+  takeLatest,
+  call,
+  put,
+  select
+} from 'redux-saga/effects';
 import { curry, map } from 'ramda';
-import { ADD_COMMENT, LOAD_STORIES, ADD_STORY } from '../actionTypes';
+import {
+  ADD_COMMENT,
+  LOAD_STORIES,
+  ADD_STORY,
+  LOAD_COMMENTS_FOR_STORY,
+  LOAD_STORY
+} from '../actionTypes';
 import loadDB from '../firebase-config';
 
 const reducers = combineReducers({
@@ -37,13 +50,30 @@ function* loadStories(action) {
   yield all(loadStoriesToStore);
 }
 
+function* loadStory(action) {
+  const db = yield call(() => loadDB());
+  const id = action.payload;
+  const story = yield call(() =>
+    db
+      .child('item')
+      .child(id)
+      .once('value')
+      .then(c => c.val())
+  );
+
+  yield put({ type: ADD_STORY, payload: story });
+  yield put({ type: LOAD_COMMENTS_FOR_STORY, payload: story.id });
+}
+
 function* loadCommentsForStory(action) {
   const db = yield call(() => loadDB());
+  console.log(db);
   const id = action.payload;
   const story = yield select(state => state.stories.byId[id]);
   const comments = yield all(map(deferredLoadComment(db), story.kids));
   const actions = map(c => put({ type: ADD_COMMENT, payload: c }), comments);
-  yield all(actions)
+
+  yield all(actions);
 }
 
 const deferredLoadComment = curry((db, id) =>
@@ -57,8 +87,11 @@ const deferredLoadComment = curry((db, id) =>
 );
 
 function* rootSaga() {
-  yield takeEvery(LOAD_STORIES, loadStories);
-  yield takeEvery('LOAD_COMMENTS_FOR_STORY', loadCommentsForStory);
+  yield all([
+    yield takeEvery(LOAD_STORY, loadStory),
+    yield takeEvery(LOAD_STORIES, loadStories),
+    yield takeLatest(LOAD_COMMENTS_FOR_STORY, loadCommentsForStory)
+  ]);
 }
 
 const configureStore = preloadedState => {

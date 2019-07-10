@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Head from '../components/common/head';
 import Nav from '../components/common/nav';
 import Comment from '../components/comments/comment';
@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
 import Link from 'next/link';
 import { compose, pipe, into, map, filter } from 'ramda';
+import { LOAD_STORY, LOAD_COMMENTS_FOR_STORY } from '../actionTypes';
 
 const mapStateToProps = state => ({
   getCurrentStory: id => state.stories.byId[id],
   getCommentsForStory: id => {
+    console.log(state);
     const story = state.stories.byId[id];
     const { byId, allIds } = state.comments;
 
@@ -22,8 +24,15 @@ const mapStateToProps = state => ({
   }
 });
 
+const mapDispatchToProps = dispatch => ({
+  loadCommentsForStory: id =>
+    dispatch({ type: LOAD_COMMENTS_FOR_STORY, payload: id })
+});
+
 const Comments = props => {
   const story = props.getCurrentStory(props.id);
+  props.loadCommentsForStory(story.id);
+
   const comments = props.getCommentsForStory(props.id);
   return (
     <div>
@@ -68,13 +77,15 @@ const Comments = props => {
 };
 
 Comments.getInitialProps = async function({ isServer, store, query }) {
-  store.dispatch({ type: 'LOAD_COMMENTS_FOR_STORY', payload: query.id });
-
+  if (isServer) store.dispatch({ type: LOAD_STORY, payload: query.id });
   console.log(store.getState());
   return { id: query.id };
 };
 
 export default pipe(
   withRouter,
-  connect(mapStateToProps)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 )(Comments);
