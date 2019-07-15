@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import Link from '../forwardRefs/Link'
+import Link from '../forwardRefs/Link';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import { distanceInWordsToNow } from 'date-fns';
 import { pipe } from 'ramda';
 
@@ -12,60 +14,62 @@ const HNStory = props => {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="row ">
+    <div className="row">
       <div className="card">
-        <Link href={props.url}>
-          <a>
-            <h3>{props.title}</h3>
-          </a>
-        </Link>
-        <p>
-          <b>{props.score} points</b> submitted{' '}
-          {distanceOfUnixTimestampInWordToNow(props.time)} ago by{' '}
-          <b>{props.user}</b>
-        </p>
-        <div className="comments">
-          <Link as={`/c/${props.id}`} href={`/comments?id=${props.id}`}>
-            <a>
-              <h3>Comments: {props.descendants}</h3>
-            </a>
-          </Link>
-        </div>
-        <div>
-          <button
-            onClick={() => {
-              setCount(count + 1);
-              console.log(count);
-            }}
-          >
-            Click Me!
-          </button>
-        </div>
-        <div>
-          <p> Count #: {count}</p>
-        </div>
+        <Paper>
+          <div className="content">
+            <Link href={props.url}>
+              <a>
+                <Button color="primary">{props.title}</Button>
+              </a>
+            </Link>
+            <div className="score">
+              <b>{props.score} points</b> submitted{' '}
+              {distanceOfUnixTimestampInWordToNow(props.time)} ago by{' '}
+              <b>{props.user}</b>
+            </div>
+            <div className="comments">
+              <Link as={`/c/${props.id}`} href={`/comments?id=${props.id}`}>
+                <a>
+                  <Button>Comments: {props.descendants}</Button>
+                </a>
+              </Link>
+            </div>
+          </div>
+        </Paper>
       </div>
       <style jsx>{`
         .row {
           max-width: 880px;
-          margin: 20px auto 2px;
+          margin-top: 20px;
+          margin-right: 20%;
+          margin-left: 20%;
           display: flex;
           flex-direction: row;
           justify-content: space-around;
         }
         .card {
-          padding: 12px 12px 12px;
-          margin-right: 10px;
-          margin-left: 10px;
-          width: 600px;
+          width: 800px;
           text-align: left;
           text-decoration: none;
           color: #434343;
-          border: 1px solid #9b9b9b;
         }
-        .comments {
+        .content {
+          padding: 12px 12px 12px 12px;
+        }
+
+       .comments {
           text-align: left;
-          margin-top: 12px;
+          margin-top: 24px;
+          display: inline-block;
+          text-decoration: none;
+          width: 400px;
+        }
+
+        .score {
+          margin-top: 2%;
+          margin-left: 1.5%;
+
         }
         .card a {
           text-decoration: none;
