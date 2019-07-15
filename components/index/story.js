@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
+import Link from '../forwardRefs/Link'
 import { distanceInWordsToNow } from 'date-fns';
 import { pipe } from 'ramda';
 
